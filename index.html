@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crochet Corner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f2ead9;
+    --cream-2:#ece1c9;
+    --ink:#2c2620;
+    --plum:#7a2e4a;
+    --plum-dark:#5c2138;
+    --sage:#7c8a5a;
+    --sage-dark:#5f6b43;
+    --gold:#c69344;
+    --line:#d8c9a8;
+    --white:#fffdf8;
+    --danger:#a13d2e;
+    --shadow: 0 2px 10px rgba(44,38,32,0.08);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);font-family:'Karla',sans-serif;}
+  body{min-height:100vh;}
+  h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;margin:0 0 .3em 0;letter-spacing:-0.01em;}
+  h1{font-size:2.1rem;font-style:italic;font-weight:500;}
+  h2{font-size:1.5rem;}
+  h3{font-size:1.15rem;}
+  p{line-height:1.55;margin:.2em 0 1em;}
+  a{color:var(--plum);}
+  .mono{font-family:'Space Mono',monospace;}
+  button, .btn{
+    font-family:'Karla',sans-serif;font-weight:600;font-size:.88rem;
+    border:1.5px solid var(--ink);background:var(--white);color:var(--ink);
+    padding:.55em 1.1em;border-radius:999px;cursor:pointer;transition:.15s ease;
+  }
+  button:hover, .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow);}
+  button.primary{background:var(--plum);border-color:var(--plum);color:var(--white);}
+  button.primary:hover{background:var(--plum-dark);}
+  button.sage{background:var(--sage);border-color:var(--sage);color:var(--white);}
+  button.sage:hover{background:var(--sage-dark);}
+  button.ghost{background:transparent;border-color:var(--line);}
+  button.danger{background:var(--white);border-color:var(--danger);color:var(--danger);}
+  button.danger:hover{background:var(--danger);color:var(--white);}
+  button.small{padding:.3em .7em;font-size:.75rem;}
+  input, select, textarea{
+    font-family:'Karla',sans-serif;font-size:.92rem;padding:.6em .75em;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--white);color:var(--ink);width:100%;
+  }
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--plum);outline-offset:1px;}
+  label{display:block;font-size:.8rem;font-weight:600;margin-bottom:.3em;color:var(--plum-dark);}
+  .field{margin-bottom:.9em;}
+
+  /* stitched divider */
+  .stitch{height:14px;width:100%;margin:0;background-image:radial-gradient(circle, var(--gold) 2.5px, transparent 2.6px);background-size:16px 14px;background-position:center;opacity:.55;}
+
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:1.1em 5%;flex-wrap:wrap;gap:.6em;background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+  .brand{display:flex;align-items:baseline;gap:.5em;cursor:pointer;}
+  .brand h1{font-size:1.5rem;margin:0;}
+  .brand span{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--sage-dark);letter-spacing:.08em;text-transform:uppercase;}
+  .navlinks{display:flex;gap:.6em;align-items:center;font-size:.82rem;flex-wrap:wrap;}
+  .navlinks a, .navlinks button{text-decoration:none;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:2.2em 5% 4em;}
+  .hero{text-align:center;padding:2.2em 1em 1.4em;}
+  .hero p.tag{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:.6em;}
+
+  .chipbar{display:flex;flex-wrap:wrap;gap:.5em;justify-content:center;margin:1.4em 0;}
+  .chip{border:1.5px solid var(--line);background:var(--white);border-radius:999px;padding:.4em 1em;font-size:.8rem;cursor:pointer;}
+  .chip.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+  .searchbar{max-width:340px;margin:0 auto 1.2em;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2em;margin-top:1em;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;}
+  .card img{width:100%;height:170px;object-fit:cover;background:var(--cream-2);}
+  .card .noimg{width:100%;height:170px;background:var(--cream-2);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-style:italic;color:var(--sage-dark);opacity:.6;font-size:.9rem;}
+  .card .body{padding:.9em 1em 1.1em;flex:1;display:flex;flex-direction:column;}
+  .card .tagrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4em;}
+  .badge{font-family:'Space Mono',monospace;font-size:.68rem;padding:.2em .6em;border-radius:999px;background:var(--cream-2);color:var(--ink);border:1px solid var(--line);}
+  .badge.stock{background:#eaf0e0;color:var(--sage-dark);border-color:#c9d8b4;}
+  .badge.seller{background:#f3e6ea;color:var(--plum-dark);border-color:#e3c3ce;}
+  .badge.sold{background:#eee;color:#777;border-color:#ddd;}
+  .card h4{margin-bottom:.15em;font-size:1.05rem;}
+  .card .desc{font-size:.85rem;color:#5a5248;flex:1;}
+  .itemnum{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--sage-dark);}
+
+  .login-wrap{max-width:380px;margin:3em auto;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:2em 1.8em;box-shadow:var(--shadow);}
+  .login-wrap h2{text-align:center;}
+  .login-wrap p.hint{text-align:center;font-size:.8rem;color:#8a8072;}
+
+  .dash-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6em;margin-bottom:1em;}
+  .tabs{display:flex;gap:.4em;flex-wrap:wrap;margin-bottom:1.6em;border-bottom:1px solid var(--line);padding-bottom:.8em;}
+  .tab{padding:.5em 1em;border-radius:999px;font-size:.82rem;cursor:pointer;border:1.5px solid transparent;font-weight:600;color:#7a7264;}
+  .tab.active{background:var(--ink);color:var(--white);}
+
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1em;margin-bottom:1.8em;}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.1em 1.2em;box-shadow:var(--shadow);}
+  .stat .num{font-family:'Fraunces',serif;font-size:2rem;font-weight:600;color:var(--plum);}
+  .stat .lbl{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:#8a8072;font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  th,td{text-align:left;padding:.7em .8em;border-bottom:1px solid var(--line);font-size:.85rem;}
+  th{background:var(--cream-2);font-family:'Space Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;}
+  tr:last-child td{border-bottom:none;}
+  .tablewrap{overflow-x:auto;}
+
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.5em;box-shadow:var(--shadow);margin-bottom:1.5em;}
+  .row{display:flex;gap:.8em;flex-wrap:wrap;align-items:flex-end;}
+  .row .field{flex:1;min-width:150px;}
+  .actions{display:flex;gap:.4em;flex-wrap:wrap;margin-top:.5em;}
+  .catlist{display:flex;flex-wrap:wrap;gap:.6em;margin-top:1em;}
+  .cattag{background:var(--cream-2);border:1px solid var(--line);border-radius:999px;padding:.4em 1em;font-size:.82rem;display:flex;align-items:center;gap:.5em;}
+  .cattag button{padding:.1em .5em;font-size:.7rem;border-radius:6px;}
+  .empty{text-align:center;color:#8a8072;padding:2.5em 1em;font-family:'Fraunces',serif;font-style:italic;}
+  .footnote{font-size:.75rem;color:#8a8072;margin-top:.3em;}
+  .msg{padding:.7em 1em;border-radius:8px;font-size:.85rem;margin-bottom:1em;}
+  .msg.err{background:#f8e3df;color:var(--danger);border:1px solid #eabbb2;}
+  .msg.ok{background:#e6efd9;color:var(--sage-dark);border:1px solid #c9d8b4;}
+
+  #printArea{display:none;}
+  @media print{
+    body *{visibility:hidden;}
+    #printArea, #printArea *{visibility:visible;}
+    #printArea{display:block;position:absolute;top:0;left:0;width:100%;padding:20px;}
+  }
+  @media (max-width:640px){
+    .nav{padding:1em 4%;}
+    .wrap{padding:1.6em 4% 3em;}
+    h1{font-size:1.6rem;}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="printArea"></div>
+
+<script>
+/* ---------- storage helpers ---------- */
+async function sGet(key, fallback){
+  try{
+    const r = await window.storage.get(key, true);
+    return r ? JSON.parse(r.value) : fallback;
+  }catch(e){ return fallback; }
+}
+async function sSet(key, value){
+  try{ await window.storage.set(key, JSON.stringify(value), true); }catch(e){ console.error('storage set failed', e); }
+}
+
+/* ---------- state ---------- */
+let state = {
+  view: 'public',            // public | ownerLogin | sellerLogin | ownerDash | sellerDash
+  ownerTab: 'overview',      // overview | categories | items | sales | settings
+  session: null,             // 'owner' | 'seller' | null
+  categories: [],
+  items: [],
+  sales: [],
+  config: { shopName:'Crochet Corner', tagline:'Handmade, one stitch at a time', currency:'₹', ownerPass:'owner123', sellerPass:'seller123' },
+  publicFilter: 'all',
+  publicSearch: '',
+  loading: true,
+  loginError: ''
+};
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function esc(str){
+  return String(str==null?'':str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function money(n){ return state.config.currency + Number(n||0).toFixed(2).replace(/\.00$/,''); }
+function today(){ return new Date().toISOString().slice(0,10); }
+
+/* ---------- init ---------- */
+async function init(){
+  const [cats, items, sales, cfg] = await Promise.all([
+    sGet('categories', ['Amigurumi','Blankets','Bags','Wearables']),
+    sGet('items', []),
+    sGet('sales', []),
+    sGet('config', null)
+  ]);
+  state.categories = cats;
+  state.items = items;
+  state.sales = sales;
+  if(cfg) state.config = Object.assign(state.config, cfg);
+  state.loading = false;
+  render();
+}
+
+/* ---------- nav ---------- */
+function goPublic(){ state.view='public'; state.loginError=''; render(); }
+function goOwnerLogin(){ state.view='ownerLogin'; state.loginError=''; render(); }
+function goSellerLogin(){ state.view='sellerLogin'; state.loginError=''; render(); }
+function logout(){ state.session=null; state.view='public'; render(); }
+
+function renderNav(){
+  let right = '';
+  if(state.session === 'owner'){
+    right = `<span class="badge stock">Owner</span> <button class="ghost small" onclick="state.view='ownerDash';render()">Dashboard</button> <button class="ghost small" onclick="logout()">Log out</button>`;
+  } else if(state.session === 'seller'){
+    right = `<span class="badge seller">Seller</span> <button class="ghost small" onclick="state.view='sellerDash';render()">Dashboard</button> <button class="ghost small" onclick="logout()">Log out</button>`;
+  } else {
+    right = `<button class="ghost small" onclick="goSellerLogin()">Seller login</button><button class="ghost small" onclick="goOwnerLogin()">Owner login</button>`;
+  }
+  return `
+  <div class="nav">
+    <div class="brand" onclick="goPublic()">
+      <h1>${esc(state.config.shopName)}</h1>
+      <span>crochet studio</span>
+    </div>
+    <div class="navlinks">${right}</div>
+  </div>`;
+}
+
+/* ---------- master render ---------- */
+function render(){
+  const app = document.getElementById('app');
+  if(state.loading){ app.innerHTML = '<div class="wrap"><p class="empty">Loading your studio…</p></div>'; return; }
+  let body = '';
+  if(state.view === 'public') body = renderPublic();
+  else if(state.view === 'ownerLogin') body = renderLogin('owner');
+  else if(state.view === 'sellerLogin') body = renderLogin('seller');
+  else if(state.view === 'ownerDash' && state.session==='owner') body = renderOwnerDash();
+  else if(state.view === 'sellerDash' && state.session==='seller') body = renderSellerDash();
+  else { state.view='public'; body = renderPublic(); }
+  app.innerHTML = renderNav() + body;
+}
+
+/* ---------- PUBLIC VIEW ---------- */
+function renderPublic(){
+  const visible = state.items.filter(it => it.status !== 'Sold');
+  const filtered = visible.filter(it => {
+    const catOk = state.publicFilter==='all' || it.category===state.publicFilter;
+    const s = state.publicSearch.toLowerCase();
+    const searchOk = !s || (it.name+' '+it.description).toLowerCase().includes(s);
+    return catOk && searchOk;
+  });
+  const chips = ['all', ...state.categories].map(c =>
+    `<button class="chip ${state.publicFilter===c?'active':''}" onclick="state.publicFilter='${esc(c)}';render()">${c==='all'?'All':esc(c)}</button>`
+  ).join('');
+
+  let cards = filtered.map(it => `
+    <div class="card">
+      ${it.imageUrl ? `<img src="${esc(it.imageUrl)}" alt="${esc(it.name)}" onerror="this.outerHTML='<div class=noimg>🧶 no photo</div>'">` : `<div class="noimg">🧶 no photo yet</div>`}
+      <div class="body">
+        <div class="tagrow"><span class="badge stock">${esc(it.category)}</span><span class="itemnum">#${esc(it.itemNumber)}</span></div>
+        <h4>${esc(it.name)}</h4>
+        <p class="desc">${esc(it.description || '')}</p>
+      </div>
+    </div>`).join('');
+
+  if(!filtered.length) cards = `<div class="empty">Nothing here yet — check back soon 🧶</div>`;
+
+  return `
+  <div class="wrap">
+    <div class="hero">
+      <p class="tag">Handmade catalog</p>
+      <h1>${esc(state.config.shopName)}</h1>
+      <p>${esc(state.config.tagline)}</p>
+    </div>
+    <div class="stitch"></div>
+    <div class="searchbar">
+      <input placeholder="Search items…" value="${esc(state.publicSearch)}" oninput="state.publicSearch=this.value;render()" />
+    </div>
+    <div class="chipbar">${chips}</div>
+    <div class="grid">${cards}</div>
+    <p class="footnote" style="text-align:center;margin-top:2em;">To ask about any piece, please reach out directly — prices are shared on request.</p>
+  </div>`;
+}
+
+/* ---------- LOGIN ---------- */
+function renderLogin(role){
+  const title = role==='owner' ? 'Owner login' : 'Seller login';
+  return `
+  <div class="wrap">
+    <div class="login-wrap">
+      <h2>${title}</h2>
+      <p class="hint">Enter your password to continue</p>
+      ${state.loginError ? `<div class="msg err">${esc(state.loginError)}</div>` : ''}
+      <form onsubmit="handleLogin(event,'${role}')">
+        <div class="field"><label>Password</label><input type="password" name="pw" autofocus required /></div>
+        <button class="primary" style="width:100%" type="submit">Log in</button>
+      </form>
+      <p class="footnote" style="text-align:center;margin-top:1em;"><a href="#" onclick="goPublic();return false;">← back to catalog</a></p>
+    </div>
+  </div>`;
+}
+function handleLogin(e, role){
+  e.preventDefault();
+  const pw = e.target.pw.value;
+  const correct = role==='owner' ? state.config.ownerPass : state.config.sellerPass;
+  if(pw === correct){
+    state.session = role;
+    state.view = role==='owner' ? 'ownerDash' : 'sellerDash';
+    state.loginError = '';
+  } else {
+    state.loginError = 'Incorrect password. Try again.';
+  }
+  render();
+}
+
+/* ---------- OWNER DASHBOARD ---------- */
+function ownerTabBtn(id, label){
+  return `<div class="tab ${state.ownerTab===id?'active':''}" onclick="state.ownerTab='${id}';render()">${label}</div>`;
+}
+function renderOwnerDash(){
+  const tabs = ownerTabBtn('overview','Overview') + ownerTabBtn('items','Items') + ownerTabBtn('categories','Categories') + ownerTabBtn('sales','Sales log') + ownerTabBtn('settings','Settings');
+  let content = '';
+  if(state.ownerTab==='overview') content = renderOverview();
+  else if(state.ownerTab==='items') content = renderItemsTab();
+  else if(state.ownerTab==='categories') content = renderCategoriesTab();
+  else if(state.ownerTab==='sales') content = renderSalesTab();
+  else if(state.ownerTab==='settings') content = renderSettingsTab();
+  return `<div class="wrap">
+    <div class="dash-head"><h2>Studio dashboard</h2></div>
+    <div class="tabs">${tabs}</div>
+    ${content}
+  </div>`;
+}
+
+function renderOverview(){
+  const inStock = state.items.filter(i=>i.status==='In Stock').length;
+  const withSeller = state.items.filter(i=>i.status==='With Seller').length;
+  const sold = state.items.filter(i=>i.status==='Sold').length;
+  const revenue = state.sales.reduce((s,r)=>s+Number(r.price||0),0);
+  return `
+  <div class="stat-row">
+    <div class="stat"><div class="num">${inStock}</div><div class="lbl">In stock</div></div>
+    <div class="stat"><div class="num">${withSeller}</div><div class="lbl">With seller</div></div>
+    <div class="stat"><div class="num">${sold}</div><div class="lbl">Sold total</div></div>
+    <div class="stat"><div class="num">${money(revenue)}</div><div class="lbl">Revenue to date</div></div>
+    <div class="stat"><div class="num">${state.categories.length}</div><div class="lbl">Categories</div></div>
+  </div>
+  <div class="panel">
+    <h3>By category</h3>
+    <div class="tablewrap"><table><thead><tr><th>Category</th><th>In stock</th><th>With seller</th><th>Sold</th></tr></thead><tbody>
+    ${state.categories.map(c=>{
+      const its = state.items.filter(i=>i.category===c);
+      return `<tr><td>${esc(c)}</td><td>${its.filter(i=>i.status==='In Stock').length}</td><td>${its.filter(i=>i.status==='With Seller').length}</td><td>${its.filter(i=>i.status==='Sold').length}</td></tr>`;
+    }).join('') || '<tr><td colspan="4">No categories yet.</td></tr>'}
+    </tbody></table></div>
+  </div>`;
+}
+
+function renderCategoriesTab(){
+  return `
+  <div class="panel">
+    <h3>Add a category</h3>
+    <form class="row" onsubmit="handleAddCategory(event)">
+      <div class="field"><label>Category name</label><input name="catname" required placeholder="e.g. Amigurumi" /></div>
+      <button class="primary" type="submit">Add category</button>
+    </form>
+    <div class="catlist">
+      ${state.categories.map(c=>{
+        const count = state.items.filter(i=>i.category===c).length;
+        return `<div class="cattag">${esc(c)} <span class="footnote mono" style="margin:0;">(${count})</span> <button class="danger small" onclick="handleDeleteCategory('${esc(c)}')">✕</button></div>`;
+      }).join('') || '<p class="footnote">No categories yet — add one above.</p>'}
+    </div>
+  </div>`;
+}
+function handleAddCategory(e){
+  e.preventDefault();
+  const name = e.target.catname.value.trim();
+  if(name && !state.categories.includes(name)){
+    state.categories.push(name);
+    sSet('categories', state.categories);
+  }
+  render();
+}
+function handleDeleteCategory(c){
+  const inUse = state.items.some(i=>i.category===c);
+  if(inUse){ alert('Cannot delete "'+c+'" — it still has items assigned to it. Move or delete those items first.'); return; }
+  state.categories = state.categories.filter(x=>x!==c);
+  sSet('categories', state.categories);
+  render();
+}
+
+function renderItemsTab(){
+  const catOptions = state.categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  const addForm = state.categories.length ? `
+  <div class="panel">
+    <h3>Add a new item</h3>
+    <form onsubmit="handleAddItem(event)">
+      <div class="row">
+        <div class="field"><label>Category</label><select name="category" required>${catOptions}</select></div>
+        <div class="field"><label>Item number</label><input name="itemNumber" required placeholder="e.g. 014" /></div>
+        <div class="field"><label>Price (${esc(state.config.currency)})</label><input type="number" step="0.01" min="0" name="price" required /></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Item name</label><input name="name" required placeholder="e.g. Lavender bear" /></div>
+        <div class="field"><label>Photo URL (optional)</label><input name="imageUrl" placeholder="https://…" /></div>
+      </div>
+      <div class="field"><label>Description</label><textarea name="description" rows="2" placeholder="Yarn, size, notes…"></textarea></div>
+      <button class="primary" type="submit">Add item</button>
+    </form>
+  </div>` : `<div class="panel"><p class="empty">Add a category first, then you can add items.</p></div>`;
+
+  const rows = state.items.slice().sort((a,b)=> a.category.localeCompare(b.category)).map(it=>{
+    const badgeClass = it.status==='In Stock'?'stock':(it.status==='With Seller'?'seller':'sold');
+    let actions = '';
+    if(it.status==='In Stock'){
+      actions = `<button class="small sage" onclick="assignToSeller('${it.id}')">To seller</button> <button class="small primary" onclick="openSellForm('${it.id}')">Mark sold</button>`;
+    } else if(it.status==='With Seller'){
+      actions = `<button class="small ghost" onclick="returnToStock('${it.id}')">Return to stock</button> <button class="small primary" onclick="openSellForm('${it.id}')">Mark sold</button>`;
+    } else {
+      actions = `<span class="footnote">Sold ${esc(it.soldDate||'')} for ${money(it.soldPrice)}</span>`;
+    }
+    actions += ` <button class="small danger" onclick="deleteItem('${it.id}')">Delete</button>`;
+    return `<tr>
+      <td class="mono">#${esc(it.itemNumber)}</td>
+      <td>${esc(it.category)}</td>
+      <td>${esc(it.name)}</td>
+      <td>${money(it.price)}</td>
+      <td><span class="badge ${badgeClass}">${it.status}</span></td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join('');
+
+  return `${addForm}
+  <div class="panel">
+    <h3>All items</h3>
+    <div class="tablewrap"><table><thead><tr><th>#</th><th>Category</th><th>Name</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${rows || '<tr><td colspan="6">No items yet.</td></tr>'}</tbody></table></div>
+  </div>`;
+}
+function handleAddItem(e){
+  e.preventDefault();
+  const f = e.target;
+  state.items.push({
+    id: uid(),
+    category: f.category.value,
+    itemNumber: f.itemNumber.value.trim(),
+    name: f.name.value.trim(),
+    description: f.description.value.trim(),
+    imageUrl: f.imageUrl.value.trim(),
+    price: Number(f.price.value),
+    status: 'In Stock',
+    dateAdded: today()
+  });
+  sSet('items', state.items);
+  render();
+}
+function assignToSeller(id){
+  const it = state.items.find(i=>i.id===id); if(!it) return;
+  it.status = 'With Seller';
+  sSet('items', state.items);
+  render();
+}
+function returnToStock(id){
+  const it = state.items.find(i=>i.id===id); if(!it) return;
+  it.status = 'In Stock';
+  sSet('items', state.items);
+  render();
+}
+function deleteItem(id){
+  if(!confirm('Delete this item permanently? This also removes it from the sales log if sold.')) return;
+  state.items = state.items.filter(i=>i.id!==id);
+  state.sales = state.sales.filter(s=>s.itemId!==id);
+  sSet('items', state.items); sSet('sales', state.sales);
+  render();
+}
+function openSellForm(id){
+  const it = state.items.find(i=>i.id===id); if(!it) return;
+  const price = prompt('Sale price ('+state.config.currency+')', it.price);
+  if(price===null) return;
+  const date = prompt('Date sold (YYYY-MM-DD)', today());
+  if(date===null) return;
+  it.status = 'Sold';
+  it.soldPrice = Number(price);
+  it.soldDate = date;
+  state.sales.push({ id: uid(), itemId: it.id, itemName: it.name, itemNumber: it.itemNumber, category: it.category, price: Number(price), date: date });
+  sSet('items', state.items); sSet('sales', state.sales);
+  render();
+}
+
+function renderSalesTab(){
+  const rows = state.sales.slice().sort((a,b)=> b.date.localeCompare(a.date)).map(r=>`
+    <tr><td>${esc(r.date)}</td><td class="mono">#${esc(r.itemNumber)}</td><td>${esc(r.itemName)}</td><td>${esc(r.category)}</td><td>${money(r.price)}</td></tr>
+  `).join('');
+  const total = state.sales.reduce((s,r)=>s+Number(r.price||0),0);
+  return `
+  <div class="panel">
+    <div class="dash-head"><h3 style="margin:0;">Sales log</h3>
+      <div class="actions">
+        <button class="ghost" onclick="downloadCSV()">Download CSV</button>
+        <button class="primary" onclick="downloadPDF()">Download PDF</button>
+      </div>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>Date</th><th>#</th><th>Item</th><th>Category</th><th>Price</th></tr></thead>
+    <tbody>${rows || '<tr><td colspan="5">No sales recorded yet.</td></tr>'}</tbody></table></div>
+    <p class="footnote" style="margin-top:1em;">Total revenue: <strong>${money(total)}</strong></p>
+    <p class="footnote">PDF download opens your browser's print dialog — choose "Save as PDF" as the destination.</p>
+  </div>`;
+}
+function downloadCSV(){
+  let csv = 'Date,Item Number,Item Name,Category,Price\n';
+  state.sales.forEach(r=>{ csv += `${r.date},${r.itemNumber},"${(r.itemName||'').replace(/"/g,'""')}",${r.category},${r.price}\n`; });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sales-log.csv';
+  a.click();
+}
+function downloadPDF(){
+  const total = state.sales.reduce((s,r)=>s+Number(r.price||0),0);
+  const rows = state.sales.slice().sort((a,b)=> b.date.localeCompare(a.date)).map(r=>
+    `<tr><td>${esc(r.date)}</td><td>#${esc(r.itemNumber)}</td><td>${esc(r.itemName)}</td><td>${esc(r.category)}</td><td>${money(r.price)}</td></tr>`
+  ).join('');
+  document.getElementById('printArea').innerHTML = `
+    <h2 style="font-family:Georgia,serif;">${esc(state.config.shopName)} — Sales Log</h2>
+    <p>Generated ${esc(today())}</p>
+    <table border="1" cellspacing="0" cellpadding="6" style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px;">
+      <thead><tr><th>Date</th><th>Item #</th><th>Item Name</th><th>Category</th><th>Price</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5">No sales recorded.</td></tr>'}</tbody>
+    </table>
+    <p style="margin-top:14px;"><strong>Total revenue: ${money(total)}</strong></p>
+  `;
+  window.print();
+}
+
+function renderSettingsTab(){
+  return `
+  <div class="panel">
+    <h3>Shop details</h3>
+    <form class="row" onsubmit="saveShopDetails(event)">
+      <div class="field"><label>Shop name</label><input name="shopName" value="${esc(state.config.shopName)}" /></div>
+      <div class="field"><label>Tagline</label><input name="tagline" value="${esc(state.config.tagline)}" /></div>
+      <div class="field" style="max-width:120px;"><label>Currency symbol</label><input name="currency" value="${esc(state.config.currency)}" /></div>
+      <button class="primary" type="submit">Save</button>
+    </form>
+  </div>
+  <div class="panel">
+    <h3>Passwords</h3>
+    <form class="row" onsubmit="changePassword(event,'ownerPass')">
+      <div class="field"><label>New owner password</label><input type="text" name="pw" placeholder="Leave blank to keep current" /></div>
+      <button class="ghost" type="submit">Update owner password</button>
+    </form>
+    <form class="row" onsubmit="changePassword(event,'sellerPass')">
+      <div class="field"><label>New seller password</label><input type="text" name="pw" placeholder="Leave blank to keep current" /></div>
+      <button class="ghost" type="submit">Update seller password</button>
+    </form>
+    <p class="footnote">Share the seller password only with your trusted third-party seller — it gives them price and stock-count visibility.</p>
+  </div>
+  <div class="panel">
+    <h3>Backup</h3>
+    <p class="footnote">Save a full backup of your categories, items, and sales — useful before big changes.</p>
+    <div class="actions">
+      <button class="ghost" onclick="exportBackup()">Export backup (JSON)</button>
+      <label class="btn ghost" style="cursor:pointer;">Import backup<input type="file" accept="application/json" style="display:none" onchange="importBackup(event)"></label>
+    </div>
+  </div>`;
+}
+function saveShopDetails(e){
+  e.preventDefault();
+  state.config.shopName = e.target.shopName.value.trim() || state.config.shopName;
+  state.config.tagline = e.target.tagline.value.trim();
+  state.config.currency = e.target.currency.value.trim() || state.config.currency;
+  sSet('config', state.config);
+  render();
+}
+function changePassword(e, field){
+  e.preventDefault();
+  const pw = e.target.pw.value.trim();
+  if(pw){ state.config[field] = pw; sSet('config', state.config); alert('Password updated.'); }
+  render();
+}
+function exportBackup(){
+  const data = { categories: state.categories, items: state.items, sales: state.sales, config: state.config };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'crochet-shop-backup.json';
+  a.click();
+}
+function importBackup(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if(data.categories) state.categories = data.categories;
+      if(data.items) state.items = data.items;
+      if(data.sales) state.sales = data.sales;
+      if(data.config) state.config = Object.assign(state.config, data.config);
+      await Promise.all([sSet('categories', state.categories), sSet('items', state.items), sSet('sales', state.sales), sSet('config', state.config)]);
+      alert('Backup restored.');
+      render();
+    }catch(err){ alert('Could not read that file.'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ---------- SELLER DASHBOARD ---------- */
+function renderSellerDash(){
+  const withSeller = state.items.filter(i=>i.status==='With Seller');
+  const inStock = state.items.filter(i=>i.status==='In Stock').length;
+  const rows = withSeller.map(it=>`
+    <tr><td class="mono">#${esc(it.itemNumber)}</td><td>${esc(it.category)}</td><td>${esc(it.name)}</td><td>${money(it.price)}</td></tr>
+  `).join('');
+  return `<div class="wrap">
+    <h2>Seller dashboard</h2>
+    <div class="stat-row">
+      <div class="stat"><div class="num">${withSeller.length}</div><div class="lbl">Items with you</div></div>
+      <div class="stat"><div class="num">${inStock}</div><div class="lbl">Items maker has in stock</div></div>
+    </div>
+    <div class="panel">
+      <h3>Your items to sell</h3>
+      <div class="tablewrap"><table><thead><tr><th>#</th><th>Category</th><th>Item</th><th>Price</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="4">No items assigned to you right now.</td></tr>'}</tbody></table></div>
+    </div>
+  </div>`;
+}
+
+init();
+</script>
+</body>
+</html>
